@@ -3,9 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="js/jquery-3.3.1.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/vue.js"></script>
 </head>
+<script type="text/javascript">
+    btn.onclick = function(){
+
+        $.ajax({
+        url: '/change_data',
+        type: 'post',
+        dataType: 'json',
+        data: {
+            'user':user.value,
+            'password':password.value
+        },
+        successor: function (data) {
+            console(data)
+
+        }
+    })
+}
+</script>
 <body>
-   <form method="post" action="parsing_get.wsgi">
+  <div>
        <h1>登录</h1>
       <p>
          账号: <input type="text" name="user">
@@ -15,9 +36,9 @@
          </p>
 
       <p>
-         <input type="submit" value="Submit">
+         <input type="submit" value="Submit" id = 'btn'>
          </p>
-      </form>
+      </div>
    <p>
       账号: %s<br>
       密码: %s

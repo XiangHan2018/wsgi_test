@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<script>
+
+
+    function test() {
+        var user = document.getElementById('user')
+        user.innerHTML ='账号:'
+        user.insertAdjacentHTML('beforeend',123)
+        // user.innerHTML +='123'
+        var paswd = document.getElementById('paswd')
+        paswd.innerHTML = '密码:'
+        paswd.insertAdjacentHTML('beforeend',456)
+
+
+        
+    }
+
+</script>
+<body>
+<p>你进来了哦</p>
+<p>点击这里查看账号密码<button type="button" onclick="test()">按钮</button></p>
+
+<p id = 'user'>账号:</p>
+<p id = paswd>密码:</p>
+
+</body>
+</html>
