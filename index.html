@@ -3,45 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="js/jquery-3.3.1.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script src="js/vue.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
 </head>
-<script type="text/javascript">
-    btn.onclick = function(){
 
-        $.ajax({
-        url: '/change_data',
-        type: 'post',
-        dataType: 'json',
-        data: {
-            'user':user.value,
-            'password':password.value
-        },
-        successor: function (data) {
-            console(data)
-
-        }
-    })
-}
-</script>
 <body>
   <div>
        <h1>登录</h1>
       <p>
-         账号: <input type="text" name="user">
+         账号: <input type="text" id="user"/>
          </p>
        <p>
-         密码: <input type="text" name="password">
+         密码: <input type="text" id="password"/>
          </p>
 
       <p>
-         <input type="submit" value="Submit" id = 'btn'>
+         <button id="btn">提交</button>
          </p>
       </div>
    <p>
       账号: %s<br>
       密码: %s
       </p>
+
+<script type="text/javascript">
+    //提交写入后台
+    console.log(document.getElementById('user'));
+    window.onload=function () {
+        document.getElementById('btn').onclick = function(){
+        console.log(document.getElementById('user').value);
+    	$.ajax({
+    		url:'http://localhost:8080/44',
+    		type:'POST',
+            dataType : "json",
+    		data:{
+    			'user':document.getElementById('user').value,
+    			'password':document.getElementById('password').value
+    		},
+
+    		success:function(data){
+    			console.log(data);
+    		}
+    })
+
+}
+    }
+</script>
 </body>
 </html>
