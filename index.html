@@ -27,22 +27,49 @@
 
 <script type="text/javascript">
     //提交写入后台
-    console.log(document.getElementById('user'));
+    // console.log(document.getElementById('user'));
     window.onload=function () {
+
         document.getElementById('btn').onclick = function(){
-        console.log(document.getElementById('user').value);
+            // console.log(document.getElementById('user').value.length)
+        if(document.getElementById('user').value.length == 0 || document.getElementById('password').value.length == 0)
+        {
+            alert("请输入用户名和密码！")
+            return false
+        }
+        // console.log(document.getElementById('user').value);
     	$.ajax({
     		url:'http://localhost:8080/44',
     		type:'POST',
-            dataType : "json",
     		data:{
     			'user':document.getElementById('user').value,
     			'password':document.getElementById('password').value
     		},
 
-    		success:function(data){
-    			console.log(data);
-    		}
+    		success: function(data){
+    		    var dataObj=eval("("+data+")")
+    		    if (dataObj.code == 200){
+
+    		        // var data = JSON.parse(data)
+                    console.log(dataObj)
+                }
+    		    else {
+    		        alert(data.msg)
+                }
+
+
+
+    		},
+    		error: function (XMLHttpRequest, textStatus, errorThrown,data) {
+    		    var dataObj=eval("("+data+")")
+                var data1=eval("("+dataObj+")")
+    		    alert(data1)
+                alert(XMLHttpRequest.status);
+                alert(XMLHttpRequest.readyState);
+                alert(textStatus);
+
+
+            }
     })
 
 }

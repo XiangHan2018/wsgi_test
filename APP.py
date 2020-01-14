@@ -2,30 +2,50 @@
 # application/framework side
 from wsgiref.simple_server import make_server
 from cgi import parse_qs
+import json
 
 
 def application(environ, start_response):
     print(environ['PATH_INFO'])
-    f = open('index.html', 'rb')
-    body = f.read()
-    f.close()
-    # print(body)
+    # f = open('index.html', 'rb')
+    # body = f.read()
+    # f.close()
+    json_data = {
+        "code": 0,
+        "msg": "",
+        "data": {
+
+        }
+    }
     body2 = login_test(environ)
-    # print(environ)
-    # print(body)
+
     body3 = 'qing deng lu'
-    start_response('200 OK', [('Content-Type', 'text/html;charset=UTF-8')])
+
     if 'None' not in body2:
-        f = open('index2.html', 'rb')
-        body = f.read()
-        f.close()
         body3 = 'deng lu cheng gong'
+        json_data['msg']  = body3
+        json_data['data']['user'] = body2[0]
+        json_data['data']['passwrd'] = body2[1]
+    else:
+        json_data['code'] = 1
+        json_data['msg'] = body3
 
-        return body, body3
+    if environ.get('HTTP_ORIGIN'):
+        response_headers = [
+            ('Content-Type', 'application/json'),
+            ('Content-Length', '117'),
+            ('Access-Control-Allow-Origin', environ.get('HTTP_ORIGIN')),
+            ('Access-Control-Allow-Headers', 'Content-Type')]
+        print(environ.get('HTTP_ORIGIN'))
+        start_response('200 OK', response_headers)
+    else:
+        start_response('200 OK', [('Content-Type', 'application/json')])
 
-    # print(body)
-    # print(body2)
-    return [body, body3]
+    json_data = json.dumps(json_data)
+    print(len(json_data))
+    print(json_data)
+    print(type(json_data))
+    return json_data
 
 
 def login_test(env):
@@ -45,14 +65,26 @@ def login_test(env):
     return [user, passwd]
 
 
-def test_1():
-    return 'This is a python application!2222'
+
+
 
 
 # server/gateway side
 class Http_split():
     def __init__(self, app):
         self.app = app
+
+    def test_3(self, env, start_response, ORIGIN):
+        response_body = 'oK'
+        status = '200 OK'
+        response_headers = [
+            ('Content-Type', 'text/plain'),
+            ('Content-Length', str(len(response_body))),
+            ('Access-Control-Allow-Origin', ORIGIN),
+            ('Access-Control-Allow-Headers', 'Content-Type')]
+        start_response(status, response_headers)
+
+        return [response_body.encode('utf-8')]
 
     def test_1(self, env, start_response):
 
@@ -71,7 +103,21 @@ class Http_split():
         start_response(strat, harders)
         return [body]
 
+    # def test_3(self,env,start_response,ORIGIN):
+    #     response_headers.extend([('Access-Control-Allow-Origin', origin)])
+    #     return start_response(status, response_headers, exc_info)
+
+
     def __call__(self, env, start_response):
+        # ORIGIN = env.get('HTTP_ORIGIN')
+        # if ORIGIN:
+        #     if env.get('REQUEST_METHOD') == 'OPTIONS':
+        #         return test_1(env,start_response,ORIGIN)
+        #     else:
+        #
+        #
+        # else:
+
         if env['PATH_INFO']:
             if env['PATH_INFO'] == '/1':
                 return self.test_1(env, start_response)
@@ -80,8 +126,8 @@ class Http_split():
             else:
                 return self.app(env, start_response)
 
-
         else:
+
             return self.app(env, start_response)
 
 
