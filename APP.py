@@ -3,6 +3,7 @@
 from wsgiref.simple_server import make_server
 from cgi import parse_qs
 import json
+import re
 
 
 def application(environ, start_response):
@@ -13,9 +14,14 @@ def application(environ, start_response):
     json_data = {
         "code": 0,
         "msg": "",
-        "data": {
+        "resulet":{
+            "data": {
 
+            }
         }
+
+
+
     }
     body2 = login_test(environ)
 
@@ -23,9 +29,9 @@ def application(environ, start_response):
 
     if 'None' not in body2:
         body3 = 'deng lu cheng gong'
-        json_data['msg']  = body3
-        json_data['data']['user'] = body2[0]
-        json_data['data']['passwrd'] = body2[1]
+        json_data['msg'] = body3
+        json_data['resulet']['data']['user'] = body2[0]
+        json_data['resulet']['data']['passwrd'] = body2[1]
     else:
         json_data['code'] = 1
         json_data['msg'] = body3
@@ -55,18 +61,22 @@ def login_test(env):
         login_size = 0
     # print('login_size' + str(login_size))
     requests_body = env['wsgi.input'].read(login_size)
+    # print(env)
 
-    body = parse_qs(requests_body)
-    # print('body:' + str(body))
-    user = body.get('user', ['None'])[0].encode('utf-8')
-    passwd = body.get('password', ['None'])[0].encode('utf-8')
+    body = requests_body.decode('utf-8')
+    body = re.sub('\'', '\"', body)
+    json_dict = json.loads(body)
+    print(json_dict)
+    try:
+
+        user = json_dict['data']['user']
+        passwd = json_dict['data']['passwrod']
+    except KeyError:
+        user = 'None'
+        passwd = 'None'
 
     print(user, passwd)
     return [user, passwd]
-
-
-
-
 
 
 # server/gateway side
@@ -107,7 +117,6 @@ class Http_split():
     #     response_headers.extend([('Access-Control-Allow-Origin', origin)])
     #     return start_response(status, response_headers, exc_info)
 
-
     def __call__(self, env, start_response):
         # ORIGIN = env.get('HTTP_ORIGIN')
         # if ORIGIN:
@@ -119,6 +128,10 @@ class Http_split():
         # else:
 
         if env['PATH_INFO']:
+
+            if 'PATH_INFO' in env.keys():
+                if env['REQUEST_METHOD'] == 'OPTIONS':
+                    return self.test_3(env, start_response,env['HTTP_ORIGIN'])
             if env['PATH_INFO'] == '/1':
                 return self.test_1(env, start_response)
             if env['PATH_INFO'] == '/change_data':

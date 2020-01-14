@@ -13,7 +13,7 @@
          账号: <input type="text" id="user"/>
          </p>
        <p>
-         密码: <input type="text" id="password"/>
+         密码: <input type="text" id="passwrod"/>
          </p>
 
       <p>
@@ -32,7 +32,7 @@
 
         document.getElementById('btn').onclick = function(){
             // console.log(document.getElementById('user').value.length)
-        if(document.getElementById('user').value.length == 0 || document.getElementById('password').value.length == 0)
+        if(document.getElementById('user').value.length == 0 || document.getElementById('passwrod').value.length == 0)
         {
             alert("请输入用户名和密码！")
             return false
@@ -41,10 +41,14 @@
     	$.ajax({
     		url:'http://localhost:8080/44',
     		type:'POST',
-    		data:{
-    			'user':document.getElementById('user').value,
-    			'password':document.getElementById('password').value
-    		},
+            dataType:'json',
+            contentType:"application/json",
+    		data:JSON.stringify({
+                "data":{
+                    'user':document.getElementById('user').value,
+                    'passwrod':document.getElementById('passwrod').value
+    		    }
+    		}),
 
     		success: function(data){
     		    var dataObj=eval("("+data+")")
@@ -63,10 +67,11 @@
     		error: function (XMLHttpRequest, textStatus, errorThrown,data) {
     		    var dataObj=eval("("+data+")")
                 var data1=eval("("+dataObj+")")
-    		    alert(data1)
-                alert(XMLHttpRequest.status);
-                alert(XMLHttpRequest.readyState);
-                alert(textStatus);
+                console.log(data1)
+                console.log(XMLHttpRequest.status)
+                console.log(XMLHttpRequest.readyState)
+                console.log(textStatus)
+
 
 
             }
