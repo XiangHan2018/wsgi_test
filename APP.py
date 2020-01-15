@@ -25,16 +25,17 @@ def application(environ, start_response):
     }
     body2 = login_test(environ)
 
-    body3 = 'qing deng lu'
+    body4 = 'qing deng lu'
 
     if 'None' not in body2:
         body3 = 'deng lu cheng gong'
+        print()
         json_data['msg'] = body3
         json_data['resulet']['data']['user'] = body2[0]
         json_data['resulet']['data']['passwrd'] = body2[1]
     else:
         json_data['code'] = 1
-        json_data['msg'] = body3
+        json_data['msg'] = body4
 
     if environ.get('HTTP_ORIGIN'):
         response_headers = [
@@ -46,12 +47,12 @@ def application(environ, start_response):
         start_response('200 OK', response_headers)
     else:
         start_response('200 OK', [('Content-Type', 'application/json')])
-
+    # print(type(json_data),json_data)
+    # print(type(json_data['msg']))
     json_data = json.dumps(json_data)
-    print(len(json_data))
+    # print(len(json_data))
     print(json_data)
-    print(type(json_data))
-    return json_data
+    return [json_data.encode('utf-8')]
 
 
 def login_test(env):
@@ -68,14 +69,13 @@ def login_test(env):
     json_dict = json.loads(body)
     print(json_dict)
     try:
-
         user = json_dict['data']['user']
         passwd = json_dict['data']['passwrod']
     except KeyError:
         user = 'None'
         passwd = 'None'
 
-    print(user, passwd)
+    # print(type(user), type(passwd))
     return [user, passwd]
 
 
