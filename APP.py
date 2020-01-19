@@ -40,7 +40,7 @@ def application(environ, start_response):
     if environ.get('HTTP_ORIGIN'):
         response_headers = [
             ('Content-Type', 'application/json'),
-            ('Content-Length', '117'),
+            ('Content-Length', str(len(str(json_data)))),
             ('Access-Control-Allow-Origin', environ.get('HTTP_ORIGIN')),
             ('Access-Control-Allow-Headers', 'Content-Type')]
         print(environ.get('HTTP_ORIGIN'))
