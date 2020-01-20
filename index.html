@@ -51,16 +51,13 @@
     		}),
 
     		success: function(data){
-    		    // var dataObj=eval("("+data+")")
-    		    if (data.code == 200){
+    		    if (data.code == 0){
 
-    		        // var data = JSON.parse(data)
-                    console.log(dataObj)
+                    console.log(data)
                 }
     		    else {
     		        alert(data.msg)
                 }
-
 
 
     		},

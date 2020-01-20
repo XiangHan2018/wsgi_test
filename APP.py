@@ -25,22 +25,19 @@ def application(environ, start_response):
     }
     body2 = login_test(environ)
 
-    body4 = 'qing deng lu'
+    json_data['msg'] = '请登录'
 
     if 'None' not in body2:
-        body3 = 'deng lu cheng gong'
-        print()
-        json_data['msg'] = body3
+        json_data['msg'] = '登录成功'
         json_data['resulet']['data']['user'] = body2[0]
         json_data['resulet']['data']['passwrd'] = body2[1]
     else:
         json_data['code'] = 1
-        json_data['msg'] = body4
-
+    json_data = json.dumps(json_data)
     if environ.get('HTTP_ORIGIN'):
         response_headers = [
             ('Content-Type', 'application/json'),
-            ('Content-Length', str(len(str(json_data)))),
+            ('Content-Length', str(len(json_data))),
             ('Access-Control-Allow-Origin', environ.get('HTTP_ORIGIN')),
             ('Access-Control-Allow-Headers', 'Content-Type')]
         print(environ.get('HTTP_ORIGIN'))
@@ -49,8 +46,7 @@ def application(environ, start_response):
         start_response('200 OK', [('Content-Type', 'application/json')])
     # print(type(json_data),json_data)
     # print(type(json_data['msg']))
-    json_data = json.dumps(json_data)
-    # print(len(json_data))
+
     print(json_data)
     return [json_data.encode('utf-8')]
 
