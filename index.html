@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 </head>
 
 <body>
@@ -54,6 +54,12 @@
     		    if (data.code == 0){
 
                     console.log(data)
+                    var user = data.resulet.data.user
+                    var passwrod = data.resulet.data.passwrd
+                    localStorage.setItem('user',user)
+                    localStorage.setItem('passwrod',passwrod)
+
+                    window.location.href = '/wsgi_test/index2.html'
                 }
     		    else {
     		        alert(data.msg)
@@ -62,9 +68,7 @@
 
     		},
     		error: function (XMLHttpRequest, textStatus, errorThrown,data) {
-    		    var dataObj=eval("("+data+")")
-                var data1=eval("("+dataObj+")")
-                console.log(data1)
+                console.log(data)
                 console.log(XMLHttpRequest.status)
                 console.log(XMLHttpRequest.readyState)
                 console.log(textStatus)

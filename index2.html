@@ -10,11 +10,10 @@
     function test() {
         var user = document.getElementById('user')
         user.innerHTML ='账号:'
-        user.insertAdjacentHTML('beforeend',123)
-        // user.innerHTML +='123'
+        user.insertAdjacentHTML('beforeend', localStorage.getItem('user'))
         var paswd = document.getElementById('paswd')
         paswd.innerHTML = '密码:'
-        paswd.insertAdjacentHTML('beforeend',456)
+        paswd.insertAdjacentHTML('beforeend',localStorage.getItem('passwrod'))
 
 
         

@@ -1,16 +1,8 @@
 from wsgiref.simple_server import make_server
+from APP import application
+from app_cors import Http_split
 
 
-def app(env, start_response):
-    body = 'test_2'
-    strat = '200 ok'
-    print(env['REQUEST_URI'])
-    harders = [('Content-Type', 'text/plain'),
-               ('Content-Length', str(len(body)))]
-    start_response(strat, harders)
-    return [body]
-
-
+app = Http_split(application.login)
 server = make_server('localhost', 8080, app)
 server.serve_forever()
-
